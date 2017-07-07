@@ -1,0 +1,121 @@
+{
+    "kind": "List",
+    "apiVersion": "v1",
+    "metadata": {},
+    "items": [
+        {
+            "kind": "ImageStream",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "alpine-caddy",
+                "creationTimestamp": null,
+                "labels": {
+                    "build": "bcgov-s2i-caddy"
+                },
+                "annotations": {
+                    "openshift.io/generated-by": "OpenShiftNewBuild"
+                }
+            },
+            "spec": {
+                "tags": [
+                    {
+                        "name": "latest",
+                        "annotations": {
+                            "openshift.io/imported-from": "zzrot/alpine-caddy"
+                        },
+                        "from": {
+                            "kind": "DockerImage",
+                            "name": "zzrot/alpine-caddy"
+                        },
+                        "generation": null,
+                        "importPolicy": {}
+                    }
+                ]
+            },
+            "status": {
+                "dockerImageRepository": ""
+            }
+        },
+        {
+            "kind": "ImageStream",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "bcgov-s2i-caddy",
+                "creationTimestamp": null,
+                "labels": {
+                    "build": "bcgov-s2i-caddy"
+                },
+                "annotations": {
+                    "openshift.io/generated-by": "OpenShiftNewBuild"
+                }
+            },
+            "spec": {},
+            "status": {
+                "dockerImageRepository": ""
+            }
+        },
+        {
+            "kind": "BuildConfig",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "bcgov-s2i-caddy",
+                "creationTimestamp": null,
+                "labels": {
+                    "build": "bcgov-s2i-caddy"
+                },
+                "annotations": {
+                    "openshift.io/generated-by": "OpenShiftNewBuild"
+                }
+            },
+            "spec": {
+                "triggers": [
+                    {
+                        "type": "GitHub",
+                        "github": {
+                            "secret": "vkhaTFPtkGRGfXqzF69g"
+                        }
+                    },
+                    {
+                        "type": "Generic",
+                        "generic": {
+                            "secret": "C1zSPy1g5lg98CyCbn4O"
+                        }
+                    },
+                    {
+                        "type": "ConfigChange"
+                    },
+                    {
+                        "type": "ImageChange",
+                        "imageChange": {}
+                    }
+                ],
+                "source": {
+                    "type": "Git",
+                    "git": {
+                        "uri": "https://github.com/BCDevOps/s2i-caddy.git"
+                    }
+                },
+                "strategy": {
+                    "type": "Docker",
+                    "dockerStrategy": {
+                        "from": {
+                            "kind": "ImageStreamTag",
+                            "name": "alpine-caddy:latest"
+                        }
+                    }
+                },
+                "output": {
+                    "to": {
+                        "kind": "ImageStreamTag",
+                        "name": "bcgov-s2i-caddy:latest"
+                    }
+                },
+                "resources": {},
+                "postCommit": {}
+            },
+            "status": {
+                "lastVersion": 0
+            }
+        }
+    ]
+}
