@@ -22,6 +22,3 @@ fi
 
 echo "---> Installing application source..."
 cp -Rf /tmp/src/* /var/www/html
-
-echo "---> Building application from source..."
-# TODO: Add build steps for your application, eg npm install, bundle install
