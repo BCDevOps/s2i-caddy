@@ -14,6 +14,8 @@ ADD Caddyfile /etc/Caddyfile
 # Expose the port for the container to Caddy's default
 EXPOSE 2015
 
+USER 1001
+
 ENTRYPOINT ["/sbin/tini"]
 
 CMD ["sh","/tmp/scripts/usage"]
