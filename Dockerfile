@@ -1,4 +1,4 @@
-FROM zzrot/alpine-caddy
+FROM zzrot/alpine-caddy:v0.9.5
 MAINTAINER shea.phillips@cloudcompass.ca
 
 LABEL io.openshift.s2i.scripts-url=image:///tmp/scripts
