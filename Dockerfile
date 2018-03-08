@@ -1,5 +1,31 @@
-FROM zzrot/alpine-caddy:v0.9.5
+FROM alpine:3.7
 MAINTAINER shea.phillips@cloudcompass.ca
+
+RUN apk update && \
+    apk upgrade
+
+# ===================================================================================================================================================================
+# Install Caddy
+# Refs:
+# - https://github.com/ZZROTDesign/alpine-caddy
+# - https://github.com/mholt/caddy
+# -------------------------------------------------------------------------------------------------------------------------------------------------------------------
+RUN apk update && \
+    apk --no-cache add \
+        tini \
+        git \
+        openssh-client && \
+    apk --no-cache add --virtual \
+        devs \
+        tar \
+        curl
+
+# Install Caddy Server, and All Middleware
+RUN curl -L "https://github.com/mholt/caddy/releases/download/v0.10.10/caddy_v0.10.10_linux_amd64.tar.gz" \
+    | tar --no-same-owner -C /usr/bin/ -xz caddy
+
+# Remove build devs
+RUN apk del devs
 
 LABEL io.openshift.s2i.scripts-url=image:///tmp/scripts
 
