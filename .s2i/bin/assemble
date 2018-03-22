@@ -20,8 +20,18 @@ if [ "$(ls /tmp/artifacts/ 2>/dev/null)" ]; then
   mv /tmp/artifacts/. ./
 fi
 
-echo "---> Installing application source..."
+echo "---> Copying repository content into place..."
 cp -Rf /tmp/src/* /var/www/html
+
+# (through detective work, we discovered that additional source image content is placed in /tmp/build/inputs by s2i)
+# the bit below allows additional content that originates from one or more additional source images to be added to the output image
+if [ -d /tmp/build/inputs ]; then
+    echo "Additional image content found..."
+    echo "---> Copying additional image content into place..."
+    cp -Rf /tmp/build/inputs/* /var/www/html
+else
+    echo "No additional image content found."
+fi
 
 if [[ -e "/var/www/html/Caddyfile" ]]; then
     echo "Replacing default Caddyfile..."
