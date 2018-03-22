@@ -21,6 +21,8 @@ if [ "$(ls /tmp/artifacts/ 2>/dev/null)" ]; then
 fi
 
 echo "---> Copying repository content into place..."
+echo "Contents of /tmp/src:"
+find /tmp/src -print
 cp -Rf /tmp/src/* /var/www/html
 
 # (through detective work, we discovered that additional source image content is placed in /tmp/build/inputs by s2i)
