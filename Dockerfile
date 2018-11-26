@@ -36,7 +36,15 @@ ADD Caddyfile /etc/Caddyfile
 
 # Create the location where we will store our content, and fiddle the permissions so we will be able to write to it.
 # Also twiddle the permissions on the Caddyfile and the s2i scripts dir so we will be able to overwrite them with a user-provided one sif desired.
-RUN mkdir -p /var/www/html && chmod g+w /var/www/html && chmod g+w /etc/Caddyfile && chmod g+w /tmp/scripts && mkdir /tmp/src && chmod g+w /tmp/src
+RUN mkdir -p /var/www/html \
+    && chmod g+w /var/www/html \
+    && chmod g+w /etc/Caddyfile \
+    && chmod g+w /tmp/scripts \
+    && mkdir /tmp/src \
+    && chmod g+w /tmp/src
+
+# Work-around for issues with S2I builds on Windows
+WORKDIR /tmp
 
 # Expose the port for the container to Caddy's default
 EXPOSE 2015
