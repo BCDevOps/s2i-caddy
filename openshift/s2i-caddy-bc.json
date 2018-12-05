@@ -70,7 +70,7 @@
                     "dockerStrategy": {
                         "from": {
                             "kind": "ImageStreamTag",
-                            "name": "alpine-caddy:latest"
+                            "name": "alpine-caddy:v0.9.5"
                         }
                     }
                 },
