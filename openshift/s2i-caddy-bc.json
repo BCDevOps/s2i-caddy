@@ -1,8 +1,11 @@
 {
-    "kind": "List",
+    "kind": "Template",
     "apiVersion": "v1",
-    "metadata": {},
-    "items": [
+    "metadata": {
+      "name": "s2i-caddy",
+      "creationTimestamp": null
+    },
+    "objects": [
         {
             "kind": "ImageStream",
             "apiVersion": "v1",
@@ -10,22 +13,16 @@
                 "name": "alpine-caddy",
                 "creationTimestamp": null,
                 "labels": {
-                    "build": "bcgov-s2i-caddy"
-                },
-                "annotations": {
-                    "openshift.io/generated-by": "OpenShiftNewBuild"
+                    "shared": "true"
                 }
             },
             "spec": {
                 "tags": [
                     {
-                        "name": "latest",
-                        "annotations": {
-                            "openshift.io/imported-from": "zzrot/alpine-caddy"
-                        },
+                        "name": "v0.9.5",
                         "from": {
                             "kind": "DockerImage",
-                            "name": "zzrot/alpine-caddy"
+                            "name": "zzrot/alpine-caddy:v0.9.5"
                         },
                         "generation": null,
                         "importPolicy": {}
@@ -40,13 +37,10 @@
             "kind": "ImageStream",
             "apiVersion": "v1",
             "metadata": {
-                "name": "bcgov-s2i-caddy",
+                "name": "${NAME}",
                 "creationTimestamp": null,
                 "labels": {
-                    "build": "bcgov-s2i-caddy"
-                },
-                "annotations": {
-                    "openshift.io/generated-by": "OpenShiftNewBuild"
+                    "shared": "true"
                 }
             },
             "spec": {},
@@ -58,29 +52,11 @@
             "kind": "BuildConfig",
             "apiVersion": "v1",
             "metadata": {
-                "name": "bcgov-s2i-caddy",
-                "creationTimestamp": null,
-                "labels": {
-                    "build": "bcgov-s2i-caddy"
-                },
-                "annotations": {
-                    "openshift.io/generated-by": "OpenShiftNewBuild"
-                }
+                "name": "${NAME}${SUFFIX}",
+                "creationTimestamp": null
             },
             "spec": {
                 "triggers": [
-                    {
-                        "type": "GitHub",
-                        "github": {
-                            "secret": "vkhaTFPtkGRGfXqzF69g"
-                        }
-                    },
-                    {
-                        "type": "Generic",
-                        "generic": {
-                            "secret": "C1zSPy1g5lg98CyCbn4O"
-                        }
-                    },
                     {
                         "type": "ConfigChange"
                     },
@@ -92,7 +68,8 @@
                 "source": {
                     "type": "Git",
                     "git": {
-                        "uri": "https://github.com/BCDevOps/s2i-caddy.git"
+                        "uri": "${GIT_REPO_URL}",
+                        "ref": "${GIT_REF}"
                     }
                 },
                 "strategy": {
@@ -100,22 +77,69 @@
                     "dockerStrategy": {
                         "from": {
                             "kind": "ImageStreamTag",
-                            "name": "alpine-caddy:latest"
+                            "name": "alpine-caddy:v0.9.5"
                         }
                     }
                 },
                 "output": {
                     "to": {
                         "kind": "ImageStreamTag",
-                        "name": "bcgov-s2i-caddy:latest"
+                        "name": "${NAME}:${OUTPUT_IMAGE_TAG}"
                     }
                 },
-                "resources": {},
-                "postCommit": {}
+                "resources": {
+                    "requests":{
+                        "cpu": "1",
+                        "memory": "2Gi"
+                    },
+                    "limits":{
+                        "cpu": "2",
+                        "memory": "3Gi"
+                    }
+                },
+                "postCommit": {},
+                "completionDeadlineSeconds": 1200,
+                "failedBuildsHistoryLimit": 2,
+                "successfulBuildsHistoryLimit": 5
             },
             "status": {
                 "lastVersion": 0
             }
+        }
+    ],
+    "parameters": [
+        {
+            "name": "NAME",
+            "displayName": "Name",
+            "description": "The name assigned to all objects.",
+            "required": true,
+            "value": "s2i-caddy"
+        },
+        {
+            "name": "SUFFIX",
+            "description": "A suffix appended to the name of all generated objects.",
+            "value": "-dev"
+        },
+        {
+            "name": "GIT_REPO_URL",
+            "displayName": "Git Repo URL",
+            "description": "The URL to your GIT repo, don't use the this default unless your just experimenting.",
+            "required": true,
+            "value": "https://github.com/BCDevOps/s2i-caddy.git"
+        },
+        {
+            "name": "GIT_REF",
+            "displayName": "Git Reference",
+            "description": "The git reference or branch.",
+            "required": true,
+            "value": "master"
+        },
+        {
+            "name": "OUTPUT_IMAGE_TAG",
+            "displayName": "Output Image Tag",
+            "description": "The tag given to the built image.",
+            "required": true,
+            "value": "latest"
         }
     ]
 }
