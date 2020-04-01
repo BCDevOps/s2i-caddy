@@ -1,4 +1,4 @@
-FROM alpine:3.7
+FROM alpine:latest
 MAINTAINER shea.phillips@cloudcompass.ca
 
 RUN apk update && \
@@ -12,16 +12,16 @@ RUN apk update && \
 # -------------------------------------------------------------------------------------------------------------------------------------------------------------------
 RUN apk update && \
     apk --no-cache add \
-        tini \
-        git \
-        openssh-client && \
+    tini \
+    git \
+    openssh-client && \
     apk --no-cache add --virtual \
-        devs \
-        tar \
-        curl
+    devs \
+    tar \
+    curl
 
 # Install Caddy Server, and All Middleware
-RUN curl -L "https://github.com/mholt/caddy/releases/download/v0.10.10/caddy_v0.10.10_linux_amd64.tar.gz" \
+RUN curl -L "https://caddyserver.com/download/linux/amd64?license=personal&telemetry=off" \
     | tar --no-same-owner -C /usr/bin/ -xz caddy
 
 # Remove build devs
