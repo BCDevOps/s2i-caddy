@@ -36,6 +36,11 @@ You would then be able to use the generated file to create your BC, and have it 
 oc create -f <whatever-you-want-to-call-your-bc>-bc.json -n <your-tools-project>
 ```
 
+## Running The Image
+
+The default entrypoint script is `caddy run --conf /etc/Caddyfile`. This can be overridden. Keep in my
+caddy 2.x is not compatible with caddy 1.x commands. Please check their [documentation](https://caddyserver.com/docs/getting-started) for more info.
+
 ## Requirements
 
 You need to have access to a `-tools` project in OpenShift and have the `oc` binary locally.
