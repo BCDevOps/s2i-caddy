@@ -37,7 +37,7 @@ fi
 
 if [[ -e "/var/www/html/Caddyfile" ]]; then
     echo "Replacing default Caddyfile..."
-    cat /var/www/html/Caddyfile > /etc/Caddyfile
+    mv /var/www/html/Caddyfile /etc/Caddyfile
 else
     echo "Using default Caddyfile."
 fi
